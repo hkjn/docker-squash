@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+declare DOCKER_USER="hkjn"
+declare DOCKER_IMAGE="docker-squash"
+declare BASE_IMAGE="hkjn/docker:$(uname -m )"
+declare BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+declare CPU_ARCH="$(uname -m)"
+declare TAG="${DOCKER_USER}/${DOCKER_IMAGE}:${CPU_ARCH}"
+declare NO_PUSH=${NO_PUSH:-""}
+
+cd ${BASE_DIR}
+sed "s|{{BASE_IMAGE}}|${BASE_IMAGE}|g" Dockerfile.in | docker build -t ${TAG} -
+[[ "${NO_PUSH}" ]] || docker push ${TAG}

@@ -1,4 +1,4 @@
-FROM docker
+FROM {{BASE_IMAGE}}
 RUN apk add --no-cache python3 && \
     pip3 install docker-squash
 ENTRYPOINT ["/usr/bin/docker-squash"]

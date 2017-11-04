@@ -18,13 +18,16 @@ pre-build:
 post-build:
 
 post-push:
+	@echo "Pushing multi-arch image manifests.."
 	docker run -v $(HOME)/.docker:/root/.docker:ro --rm hkjn/manifest-tool \
 	       push from-args --platforms linux/amd64,linux/arm \
 	                      --template $(IMAGE):ARCH \
 	                      --target $(IMAGE)
 
 docker-build: .release
+	@echo "Building image.."
 	docker build -t $(IMAGE):$(VERSION)-$(DOCKER_ARCH) .
+	@echo "Tagging image.."
 	docker tag $(IMAGE):$(VERSION)-$(DOCKER_ARCH) $(IMAGE):$(DOCKER_ARCH)
 
 .release:
